@@ -295,6 +295,10 @@ if (!document.createElement('canvas').getContext) {
     // Canvas context properties
     this.strokeStyle = '#000';
     this.fillStyle = '#000';
+    this.shadowBlur = 0;
+    this.shadowColor = 'rgba(0,0,0,0)';
+    this.shadowOffsetX = 0;
+    this.shadowOffsetY = 0;
 
     this.lineWidth = 1;
     this.lineJoin = 'miter';
@@ -314,6 +318,7 @@ if (!document.createElement('canvas').getContext) {
     this.arcScaleX_ = 1;
     this.arcScaleY_ = 1;
     this.lineScale_ = 1;
+    
   }
 
   var contextPrototype = CanvasRenderingContext2D_.prototype;
@@ -414,7 +419,6 @@ if (!document.createElement('canvas').getContext) {
                            yStart: pStart.y,
                            xEnd: pEnd.x,
                            yEnd: pEnd.y});
-
   };
 
   contextPrototype.rect = function(aX, aY, aWidth, aHeight) {
@@ -759,6 +763,8 @@ if (!document.createElement('canvas').getContext) {
       lineStr.push('<g_vml_:fill color="', color, '" opacity="', opacity,
                    '" />');
     }
+    if(this.shadowOffsetY != 0 && this.shadowOffsetX != 0 && this.shadowColor != 'rgba(0,0,0,0)')
+      lineStr.push('<g_vml_:shadow on="True" offset="' + this.shadowOffsetX + 'px,' + this.shadowOffsetY + 'px" />');
 
     lineStr.push('</g_vml_:shape>');
 
@@ -768,7 +774,7 @@ if (!document.createElement('canvas').getContext) {
   contextPrototype.fill = function() {
     this.stroke(true);
   }
-
+  
   contextPrototype.closePath = function() {
     this.currentPath_.push({type: 'close'});
   };
